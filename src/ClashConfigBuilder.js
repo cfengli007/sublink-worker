@@ -183,7 +183,7 @@ export class ClashConfigBuilder extends BaseConfigBuilder {
     addSingaporeAutoSelectGroup(proxyList) {
         this.config['proxy-groups'] = this.config['proxy-groups'] || [];
         this.config['proxy-groups'].push({
-            name: t('outboundNames.Singapore Auto Select'),
+            name: t('outboundNames.SingaporeAutoSelect'),
             type: 'url-test',
             proxies: DeepCopy(proxyList.filter(proxy => proxy.includes('新加坡') || proxy.includes('SG'))),
             url: 'https://www.gstatic.com/generate_204',
@@ -195,7 +195,7 @@ export class ClashConfigBuilder extends BaseConfigBuilder {
 
 
     addNodeSelectGroup(proxyList) {
-        proxyList.unshift('DIRECT', 'REJECT', t('outboundNames.Auto Select'), t('outboundNames.SingaporeSelect'));
+        proxyList.unshift('DIRECT', 'REJECT', t('outboundNames.Auto Select'), t('outboundNames.SingaporeAutoSelect'));
         this.config['proxy-groups'].unshift({
             type: "select",
             name: t('outboundNames.Node Select'),
