@@ -244,7 +244,15 @@ export const generateStyles = () => `
     }
   }
 
+  .form-check-input {
+    background-color: var(--checkbox-bg);
+    border-color: var(--checkbox-border);
+  }
 
+  .form-check-input:checked {
+    background-color: var(--checkbox-checked-bg);
+    border-color: var(--checkbox-checked-border);
+  }
 
   .form-check-label {
     color: var(--text-color);
@@ -311,7 +319,21 @@ export const generateStyles = () => `
     opacity: 1;
   }
 
+  #advancedOptions {
+    max-height: 0;
+    opacity: 0;
+    overflow: hidden;
+    transform: translateY(-20px);
+    transition: max-height 0.5s var(--transition-timing),
+                opacity 0.3s var(--transition-timing),
+                transform 0.3s var(--transition-timing);
+  }
 
+  #advancedOptions.show {
+    max-height: 2000px;
+    opacity: 1;
+    transform: translateY(0);
+  }
 
   .header-container {
       display: flex;
@@ -380,7 +402,25 @@ export const generateStyles = () => `
     line-height: 1.5;
   }
 
+  #subscribeLinksContainer {
+    max-height: 0;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: max-height 0.5s var(--transition-timing),
+                opacity 0.3s var(--transition-timing),
+                transform 0.3s var(--transition-timing);
+  }
 
+  #subscribeLinksContainer.show {
+    max-height: 1000px;
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  #subscribeLinksContainer.hide {
+    max-height: 0;
+    opacity: 0;
+  }
 
   .form-select option {
     background-color: var(--dropdown-bg);
@@ -393,13 +433,13 @@ export const generateStyles = () => `
   }
 
   .form-check-input {
-    background-color: var(--checkbox-bg);
-    border-color: var(--checkbox-border);
+    background-color: var(--switch-bg);
+    border-color: var(--switch-border);
   }
 
   .form-check-input:checked {
-    background-color: var(--checkbox-checked-bg);
-    border-color: var(--checkbox-checked-border);
+    background-color: var(--switch-checked-bg);
+    border-color: var(--switch-checked-bg);
   }
 
   .dropdown-menu {
@@ -431,9 +471,37 @@ export const generateStyles = () => `
   }
 
   /* 高级选项展开/收起动画 */
+  #advancedOptions {
+    max-height: 0;
+    opacity: 0;
+    overflow: hidden;
+    transform: translateY(-20px);
+    transition: max-height 0.5s var(--transition-timing),
+                opacity 0.3s var(--transition-timing),
+                transform 0.3s var(--transition-timing);
+  }
 
+  #advancedOptions.show {
+    max-height: 2000px;
+    opacity: 1;
+    transform: translateY(0);
+  }
 
   /* 订阅链接容器动画 */
+  #subscribeLinksContainer {
+    max-height: 0;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: max-height 0.5s var(--transition-timing),
+                opacity 0.3s var(--transition-timing),
+                transform 0.3s var(--transition-timing);
+  }
+
+  #subscribeLinksContainer.show {
+    max-height: 1000px;
+    opacity: 1;
+    transform: translateY(0);
+  }
 
   /* 按钮悬停动画 */
   .btn {
