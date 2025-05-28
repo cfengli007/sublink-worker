@@ -199,6 +199,7 @@ const generateScripts = () => `
     ${customPathFunctions()}
     ${saveConfig()}
     ${clearConfig()}
+    ${singaporeNodeSelectionFunction()}
   </script>
 `;
 
@@ -390,6 +391,22 @@ const generateRuleSetSelection = () => `
         <option value="minimal">${t('minimal')}</option>
         <option value="balanced">${t('balanced')}</option>
         <option value="comprehensive">${t('comprehensive')}</option>
+        <option value="proxyGroup">${t('proxyGroup')}</option>
+      </select>
+    </div>
+    <div class="form-section">
+      <div class="form-section-title d-flex align-items-center">
+        ${t('singaporeNodeSelection')}
+        <span class="tooltip-icon ms-2">
+          <i class="fas fa-question-circle"></i>
+          <span class="tooltip-content">
+            ${t('singaporeNodeSelectionTooltip')}
+          </span>
+        </span>
+      </div>
+      <select class="form-select" id="singaporeNodeSelect">
+        <option value="auto">${t('autoSelectOptimal')}</option>
+        <option value="manual">${t('manualSelect')}</option>
       </select>
     </div>
     <div class="row" id="ruleCheckboxes">
@@ -421,6 +438,14 @@ const applyPredefinedRulesFunction = () => `
     });
 
     if (predefinedRules === 'custom') {
+      return;
+    }
+
+    if (predefinedRules === 'proxyGroup') {
+      // Handle proxy group selection, e.g., by checking all rules
+      checkboxes.forEach(checkbox => {
+        checkbox.checked = true;
+      });
       return;
     }
 
@@ -492,7 +517,9 @@ const submitFormFunction = () => `
     
     let selectedRules;
     const predefinedRules = document.getElementById('predefinedRules').value;
-    if (predefinedRules !== 'custom') {
+    if (predefinedRules === 'proxyGroup') {
+      selectedRules = UNIFIED_RULES.map(rule => rule.name);
+    } else if (predefinedRules !== 'custom') {
       selectedRules = predefinedRules;
     } else {
       selectedRules = Array.from(document.querySelectorAll('input[name="selectedRules"]:checked'))
@@ -812,4 +839,33 @@ const clearConfig = () => `
     window.history.pushState({}, '', currentUrl);
     localStorage.removeItem('configEditor');
   }
+`;
+
+const singaporeNodeSelectionFunction = () => `
+  document.addEventListener('DOMContentLoaded', function() {
+    const singaporeNodeSelect = document.getElementById('singaporeNodeSelect');
+    const ruleCheckboxes = document.getElementById('ruleCheckboxes');
+
+    // Load saved preference
+    const savedSingaporeNodeSelection = localStorage.getItem('singaporeNodeSelection');
+    if (savedSingaporeNodeSelection) {
+      singaporeNodeSelect.value = savedSingaporeNodeSelection;
+    }
+
+    function toggleRuleCheckboxes() {
+      if (singaporeNodeSelect.value === 'auto') {
+        ruleCheckboxes.classList.add('d-none'); // Hide checkboxes
+      } else {
+        ruleCheckboxes.classList.remove('d-none'); // Show checkboxes
+      }
+    }
+
+    // Initial toggle based on loaded or default value
+    toggleRuleCheckboxes();
+
+    singaporeNodeSelect.addEventListener('change', function() {
+      localStorage.setItem('singaporeNodeSelection', this.value);
+      toggleRuleCheckboxes();
+    });
+  });
 `;

@@ -75,7 +75,9 @@ const translations = {
       'Financial': '💰 金融服务',
       'Cloud Services': '☁️ 云服务',
       'Non-China': '🌐 非中国',
-      'GLOBAL': 'GLOBAL'
+      'GLOBAL': 'GLOBAL',
+      'Singapore Auto Select': '🇸🇬 新加坡自动选择',
+      'Singapore': '🇸🇬 新加坡'
     },
     UASettings: '自定义UserAgent',
     UAtip: '默认值curl/7.74.0'
@@ -131,7 +133,7 @@ const translations = {
     customRuleProtocolTooltip: 'Protocol rules for specific traffic types. More details: https://sing-box.sagernet.org/configuration/route/sniff/',
     customRuleProtocolPlaceholder: 'Protocols (comma separated, e.g., http,ssh,dns)',
     removeCustomRule: 'Remove',
-    outboundNames:{
+    outboundNames: {
       'Auto Select': '⚡ Auto Select',
       'Node Select': '🚀 Node Select',
       'Fall Back': '🐟 Fall Back',
@@ -153,7 +155,9 @@ const translations = {
       'Financial': '💰 Financial Services',
       'Cloud Services': '☁️ Cloud Services',
       'Non-China': '🌐 Non-China',
-      'GLOBAL': 'GLOBAL'
+      'GLOBAL': 'GLOBAL',
+      'Singapore Auto Select': '🇸🇬 Singapore Auto Select',
+      'Singapore': '🇸🇬 Singapore'
     },
     UASettings: 'Custom UserAgent',
     UAtip: 'By default it will use curl/7.74.0'
@@ -231,7 +235,9 @@ const translations = {
       'Financial': '💰 سرویس‌های مالی',
       'Cloud Services': '☁️ سرویس‌های ابری',
       'Non-China': '🌐 خارج از چین',
-      'GLOBAL': 'GLOBAL'
+      'GLOBAL': 'GLOBAL',
+      'Singapore Auto Select': '🇸🇬 انتخاب خودکار سنگاپور',
+      'Singapore': '🇸🇬 سنگاپور'
     },
     UASettings: 'Custom UserAgent',
     UAtip: 'By default it will use curl/7.74.0'
@@ -300,7 +306,7 @@ const translations = {
       'Location:CN': '🔒 Сервисы Китая',
       'Telegram': '📲 Telegram',
       'Github': '🐱 GitHub',
-      'Microsoft': 'Ⓜ️ Сервисы Microsoft',
+      'Microsoft': 'Ⓜ️ Серືیسы Microsoft',
       'Apple': '🍏 Сервисы Apple',
       'Social Media': '🌐 Социальные сети',
       'Streaming': '🎬 Стриминг',
@@ -309,7 +315,9 @@ const translations = {
       'Financial': '💰 Финансовые сервисы',
       'Cloud Services': '☁️ Облачные сервисы',
       'Non-China': '🌐 За пределами Китая',
-      'GLOBAL': 'GLOBAL'
+      'GLOBAL': 'GLOBAL',
+      'Singapore Auto Select': '🇸🇬 Автовыбор Сингапур',
+      'Singapore': '🇸🇬 Сингапур'
     },
     UASettings: 'Пользовательский UserAgent',
     UAtip: 'По умолчанию используется curl/7.74.0'

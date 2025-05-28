@@ -119,6 +119,10 @@ export class BaseConfigBuilder {
         throw new Error('addAutoSelectGroup must be implemented in child class');
     }
 
+    addSingaporeAutoSelectGroup(proxyList) {
+        throw new Error('addSingaporeAutoSelectGroup must be implemented in child class');
+    }
+
     addNodeSelectGroup(proxyList) {
         throw new Error('addNodeSelectGroup must be implemented in child class');
     }
@@ -151,11 +155,15 @@ export class BaseConfigBuilder {
         const outbounds = this.getOutboundsList();
         const proxyList = this.getProxyList();
 
+        const singaporeProxies = proxyList.filter(proxy => proxy.includes('🇸🇬'));
+        if (singaporeProxies.length > 0) {
+            this.addSingaporeAutoSelectGroup(singaporeProxies);
+        }
         this.addAutoSelectGroup(proxyList);
         this.addNodeSelectGroup(proxyList);
-        this.addOutboundGroups(outbounds, proxyList);
-        this.addCustomRuleGroups(proxyList);
         this.addFallBackGroup(proxyList);
+        this.addOutboundGroups(this.selectedRules, proxyList);
+        this.addCustomRuleGroups(proxyList);
     }
 
     generateRules() {

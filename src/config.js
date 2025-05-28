@@ -117,6 +117,12 @@ export const UNIFIED_RULES = [
 		outbound: t('outboundNames.Non-China'),
 		site_rules: ['geolocation-!cn'],
 		ip_rules: []
+	},
+	{
+		name: 'Singapore',
+		outbound: t('outboundNames.Singapore'),
+		site_rules: ['geolocation-sg'],
+		ip_rules: ['sg']
 	}
 ];
 

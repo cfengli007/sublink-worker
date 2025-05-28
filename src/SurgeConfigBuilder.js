@@ -165,6 +165,13 @@ export class SurgeConfigBuilder extends BaseConfigBuilder {
         );
     }
 
+    addSingaporeAutoSelectGroup(proxyList) {
+        this.config['proxy-groups'] = this.config['proxy-groups'] || [];
+        this.config['proxy-groups'].push(
+            this.createProxyGroup(t('outboundNames.Singapore Auto Select'), 'url-test', [], ', url=http://www.gstatic.com/generate_204, interval=300')
+        );
+    }
+
     addNodeSelectGroup(proxyList) {
         this.config['proxy-groups'].push(
             this.createProxyGroup(t('outboundNames.Node Select'), 'select', [t('outboundNames.Auto Select')])

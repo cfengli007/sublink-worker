@@ -60,6 +60,14 @@ export class SingboxConfigBuilder extends BaseConfigBuilder {
         });
     }
 
+    addSingaporeAutoSelectGroup(proxyList) {
+        this.config.outbounds.unshift({
+            type: "urltest",
+            tag: t('outboundNames.Singapore Auto Select'),
+            outbounds: DeepCopy(proxyList),
+        });
+    }
+
     addNodeSelectGroup(proxyList) {
         proxyList.unshift('DIRECT', 'REJECT', t('outboundNames.Auto Select'));
         this.config.outbounds.unshift({
