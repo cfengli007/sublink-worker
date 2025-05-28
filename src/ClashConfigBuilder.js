@@ -170,12 +170,19 @@ export class ClashConfigBuilder extends BaseConfigBuilder {
     addAutoSelectGroup(proxyList) {
         this.config['proxy-groups'] = this.config['proxy-groups'] || [];
         this.config['proxy-groups'].push({
+            type: "url-test",
             name: t('outboundNames.Auto Select'),
-            type: 'url-test',
-            proxies: DeepCopy(proxyList),
-            url: 'https://www.gstatic.com/generate_204',
+            url: "http://www.gstatic.com/generate_204",
             interval: 300,
-            lazy: false
+            proxies: proxyList
+        });
+
+        this.config['proxy-groups'].push({
+            type: "url-test",
+            name: t('outboundNames.Singapore Auto Select'),
+            url: "http://www.gstatic.com/generate_204",
+            interval: 300,
+            proxies: proxyList.filter(proxy => proxy.includes('SG'))
         });
     }
 
@@ -206,7 +213,7 @@ export class ClashConfigBuilder extends BaseConfigBuilder {
                 this.config['proxy-groups'].push({
                     type: "select",
                     name: t(`outboundNames.${outbound}`),
-                    proxies: [t('outboundNames.Node Select'), ...proxyList]
+                    proxies: [t('outboundNames.Node Select'), t('outboundNames.Singapore Auto Select'), ...proxyList]
                 });
             }
         });
@@ -218,7 +225,7 @@ export class ClashConfigBuilder extends BaseConfigBuilder {
                 this.config['proxy-groups'].push({
                     type: "select",
                     name: t(`outboundNames.${rule.name}`),
-                    proxies: [t('outboundNames.Node Select'), ...proxyList]
+                    proxies: [t('outboundNames.Node Select'), t('outboundNames.Singapore Auto Select'), ...proxyList]
                 });
             });
         }
