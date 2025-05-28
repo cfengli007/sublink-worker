@@ -171,18 +171,22 @@ export class ClashConfigBuilder extends BaseConfigBuilder {
         this.config['proxy-groups'] = this.config['proxy-groups'] || [];
         this.config['proxy-groups'].push({
             type: "url-test",
+            lazy: false,
             name: t('outboundNames.Auto Select'),
             url: "http://www.gstatic.com/generate_204",
             interval: 300,
-            proxies: proxyList
+            proxies: DeepCopy(proxyList),
+            lazy: false
         });
 
         this.config['proxy-groups'].push({
             type: "url-test",
+            lazy: false,
             name: t('outboundNames.Singapore Auto Select'),
             url: "http://www.gstatic.com/generate_204",
             interval: 300,
-            proxies: proxyList.filter(proxy => proxy.includes('SG'))
+            proxies: proxyList.filter(proxy => proxy.includes('SG')),
+            lazy: false
         });
     }
 
