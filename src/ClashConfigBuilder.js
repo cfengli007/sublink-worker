@@ -219,7 +219,7 @@ export class ClashConfigBuilder extends BaseConfigBuilder {
                 this.config['proxy-groups'].push({
                     type: "select",
                     name: t(`outboundNames.${outbound}`),
-                    proxies: [t('outboundNames.Node Select'), t('outboundNames.Auto Select'), t('outboundNames.SingaporeSelect'), ...proxyList]
+                    proxies: [t('outboundNames.Node Select'), t('outboundNames.Auto Select'), ...proxyList]
                 });
             }
         });
@@ -231,7 +231,7 @@ export class ClashConfigBuilder extends BaseConfigBuilder {
                 this.config['proxy-groups'].push({
                     type: "select",
                     name: t(`outboundNames.${rule.name}`),
-                    proxies: [t('outboundNames.Node Select'), t('outboundNames.Auto Select'), t('outboundNames.SingaporeSelect'), ...proxyList]
+                    proxies: [t('outboundNames.Node Select'), t('outboundNames.Auto Select'), ...proxyList]
                 });
             });
         }
@@ -241,7 +241,7 @@ export class ClashConfigBuilder extends BaseConfigBuilder {
         this.config['proxy-groups'].push({
             type: "select",
             name: t('outboundNames.Fall Back'),
-            proxies: [t('outboundNames.Node Select'), t('outboundNames.Auto Select'), t('outboundNames.SingaporeSelect'), ...proxyList]
+            proxies: [t('outboundNames.Node Select'), t('outboundNames.Auto Select'), ...proxyList]
         });
     }
 
