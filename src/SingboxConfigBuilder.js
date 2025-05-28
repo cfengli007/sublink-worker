@@ -69,7 +69,7 @@ export class SingboxConfigBuilder extends BaseConfigBuilder {
     }
 
     addNodeSelectGroup(proxyList) {
-        proxyList.unshift('DIRECT', 'REJECT', t('outboundNames.Auto Select'));
+        proxyList.unshift('DIRECT', 'REJECT', t('outboundNames.Auto Select'), t('outboundNames.Singapore Auto Select'));
         this.config.outbounds.unshift({
             type: "selector",
             tag: t('outboundNames.Node Select'),

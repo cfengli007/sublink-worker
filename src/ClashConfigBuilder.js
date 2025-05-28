@@ -192,7 +192,7 @@ export class ClashConfigBuilder extends BaseConfigBuilder {
     }
 
     addNodeSelectGroup(proxyList) {
-        proxyList.unshift('DIRECT', 'REJECT', t('outboundNames.Auto Select'));
+        proxyList.unshift('DIRECT', 'REJECT', t('outboundNames.Auto Select'), t('outboundNames.Singapore Auto Select'));
         this.config['proxy-groups'].unshift({
             type: "select",
             name: t('outboundNames.Node Select'),

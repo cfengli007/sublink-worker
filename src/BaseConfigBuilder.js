@@ -155,7 +155,7 @@ export class BaseConfigBuilder {
         const outbounds = this.getOutboundsList();
         const proxyList = this.getProxyList();
 
-        const singaporeProxies = proxyList.filter(proxy => proxy.name.includes('新加坡'));
+        const singaporeProxies = proxyList.filter(proxy => proxy.includes('🇸🇬'));
         if (singaporeProxies.length > 0) {
             this.addSingaporeAutoSelectGroup(singaporeProxies);
         }
