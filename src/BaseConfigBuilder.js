@@ -120,7 +120,18 @@ export class BaseConfigBuilder {
     }
 
     addSingaporeAutoSelectGroup(proxyList) {
-        throw new Error('addSingaporeAutoSelectGroup must be implemented in child class');
+        this.config['proxy-groups'] = this.config['proxy-groups'] || [];
+        const singaporeProxies = proxyList.filter(proxy => this.getProxyName(proxy).toUpperCase().includes('SG'));
+        if (singaporeProxies.length > 0) {
+            this.config['proxy-groups'].push({
+                name: t('outboundNames.SingaporeSelect'),
+                type: 'url-test',
+                proxies: DeepCopy(singaporeProxies),
+                url: 'https://www.gstatic.com/generate_204',
+                interval: 300,
+                lazy: false
+            });
+        }
     }
 
     addNodeSelectGroup(proxyList) {
@@ -155,10 +166,7 @@ export class BaseConfigBuilder {
         const outbounds = this.getOutboundsList();
         const proxyList = this.getProxyList();
 
-        const singaporeProxies = proxyList.filter(proxy => proxy.includes('🇸🇬'));
-        if (singaporeProxies.length > 0) {
-            this.addSingaporeAutoSelectGroup(singaporeProxies);
-        }
+        this.addSingaporeAutoSelectGroup(proxyList);
         this.addAutoSelectGroup(proxyList);
         this.addNodeSelectGroup(proxyList);
         this.addOutboundGroups(this.selectedRules, proxyList);

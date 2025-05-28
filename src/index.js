@@ -71,7 +71,7 @@ async function handleRequest(request) {
         configBuilder = new SingboxConfigBuilder(inputString, selectedRules, customRules, baseConfig, lang, userAgent);
       } else if (url.pathname.startsWith('/clash')) {
         configBuilder = new ClashConfigBuilder(inputString, selectedRules, customRules, baseConfig, lang, userAgent);
-        configBuilder.addSingaporeSelectGroup(configBuilder.proxyList); // Add Singapore Select group
+
       } else {
         configBuilder = new SurgeConfigBuilder(inputString, selectedRules, customRules, baseConfig, lang, userAgent)
           .setSubscriptionUrl(url.href);
