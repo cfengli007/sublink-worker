@@ -77,7 +77,7 @@ const translations = {
       'Non-China': '🌐 非中国',
       'GLOBAL': 'GLOBAL',
       'Singapore Auto Select': '🇸🇬 新加坡自动选择',
-      'Singapore': '🇸🇬 新加坡'
+
     },
     UASettings: '自定义UserAgent',
     UAtip: '默认值curl/7.74.0'
@@ -157,7 +157,7 @@ const translations = {
       'Non-China': '🌐 Non-China',
       'GLOBAL': 'GLOBAL',
       'Singapore Auto Select': '🇸🇬 Singapore Auto Select',
-      'Singapore': '🇸🇬 Singapore'
+
     },
     UASettings: 'Custom UserAgent',
     UAtip: 'By default it will use curl/7.74.0'
@@ -237,7 +237,7 @@ const translations = {
       'Non-China': '🌐 خارج از چین',
       'GLOBAL': 'GLOBAL',
       'Singapore Auto Select': '🇸🇬 انتخاب خودکار سنگاپور',
-      'Singapore': '🇸🇬 سنگاپور'
+
     },
     UASettings: 'Custom UserAgent',
     UAtip: 'By default it will use curl/7.74.0'
@@ -317,7 +317,7 @@ const translations = {
       'Non-China': '🌐 За пределами Китая',
       'GLOBAL': 'GLOBAL',
       'Singapore Auto Select': '🇸🇬 Автовыбор Сингапур',
-      'Singapore': '🇸🇬 Сингапур'
+
     },
     UASettings: 'Пользовательский UserAgent',
     UAtip: 'По умолчанию используется curl/7.74.0'
