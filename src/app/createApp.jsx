@@ -111,6 +111,29 @@ export function createApp(bindings = {}) {
                 externalUiDownloadUrl,
                 singboxConfigVersion
             );
+
+            // 【新增】解析自定义国家分组参数
+            const selectedCountriesParam = c.req.query('selected_countries');
+            if (selectedCountriesParam) {
+                const codes = selectedCountriesParam.split(',').map(c => c.trim()).filter(Boolean);
+                if (codes.length > 0) {
+                    builder.selectedCountries = codes;
+                }
+            }
+
+            // 【新增】解析信息节点过滤关键词
+            const infoKeywordsParam = c.req.query('info_keywords');
+            if (infoKeywordsParam) {
+                try {
+                    const keywords = JSON.parse(infoKeywordsParam);
+                    if (Array.isArray(keywords) && keywords.length > 0) {
+                        builder.infoNodeKeywords = keywords;
+                    }
+                } catch (e) {
+                    // 忽略解析错误
+                }
+            }
+
             await builder.build();
             return c.json(builder.config);
         } catch (error) {
@@ -153,6 +176,29 @@ export function createApp(bindings = {}) {
                 externalController,
                 externalUiDownloadUrl
             );
+
+            // 【新增】解析自定义国家分组参数
+            const selectedCountriesParam = c.req.query('selected_countries');
+            if (selectedCountriesParam) {
+                const codes = selectedCountriesParam.split(',').map(c => c.trim()).filter(Boolean);
+                if (codes.length > 0) {
+                    builder.selectedCountries = codes;
+                }
+            }
+
+            // 【新增】解析信息节点过滤关键词
+            const infoKeywordsParam = c.req.query('info_keywords');
+            if (infoKeywordsParam) {
+                try {
+                    const keywords = JSON.parse(infoKeywordsParam);
+                    if (Array.isArray(keywords) && keywords.length > 0) {
+                        builder.infoNodeKeywords = keywords;
+                    }
+                } catch (e) {
+                    // 忽略解析错误
+                }
+            }
+
             await builder.build();
             return c.text(builder.formatConfig(), 200, {
                 'Content-Type': 'text/yaml; charset=utf-8'
@@ -192,6 +238,29 @@ export function createApp(bindings = {}) {
                 groupByCountry
             );
             builder.setSubscriptionUrl(c.req.url);
+
+            // 【新增】解析自定义国家分组参数
+            const selectedCountriesParam = c.req.query('selected_countries');
+            if (selectedCountriesParam) {
+                const codes = selectedCountriesParam.split(',').map(c => c.trim()).filter(Boolean);
+                if (codes.length > 0) {
+                    builder.selectedCountries = codes;
+                }
+            }
+
+            // 【新增】解析信息节点过滤关键词
+            const infoKeywordsParam = c.req.query('info_keywords');
+            if (infoKeywordsParam) {
+                try {
+                    const keywords = JSON.parse(infoKeywordsParam);
+                    if (Array.isArray(keywords) && keywords.length > 0) {
+                        builder.infoNodeKeywords = keywords;
+                    }
+                } catch (e) {
+                    // 忽略解析错误
+                }
+            }
+
             await builder.build();
 
             c.header('subscription-userinfo', 'upload=0; download=0; total=10737418240; expire=2546249531');

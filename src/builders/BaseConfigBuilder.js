@@ -14,6 +14,8 @@ export class BaseConfigBuilder {
         this.appliedOverrideKeys = new Set();
         this.groupByCountry = groupByCountry;
         this.providerUrls = [];  // URLs to use as providers (auto-sync)
+        this.selectedCountries = [];  // 用户选择的国家代码列表（自定义分组）
+        this.infoNodeKeywords = [];   // 信息节点过滤关键词
     }
 
     async build() {

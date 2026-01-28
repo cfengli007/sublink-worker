@@ -16,6 +16,48 @@ export const formLogicFn = (t) => {
             selectedRules: [],
             selectedPredefinedRule: 'balanced',
             groupByCountry: false,
+            // 【新增】自定义国家分组相关
+            customCountryGrouping: false,  // 是否启用自定义分组
+            selectedCountries: [],  // 选中的国家代码
+            allCountries: [
+                // 常用国家（前4个）
+                { code: 'US', name: '美国', emoji: '🇺🇸', common: true },
+                { code: 'CA', name: '加拿大', emoji: '🇨🇦', common: true },
+                { code: 'SG', name: '新加坡', emoji: '🇸🇬', common: true },
+                { code: 'JP', name: '日本', emoji: '🇯🇵', common: true },
+                // 其他国家
+                { code: 'GB', name: '英国', emoji: '🇬🇧', common: false },
+                { code: 'DE', name: '德国', emoji: '🇩🇪', common: false },
+                { code: 'FR', name: '法国', emoji: '🇫🇷', common: false },
+                { code: 'AU', name: '澳大利亚', emoji: '🇦🇺', common: false },
+                { code: 'NL', name: '荷兰', emoji: '🇳🇱', common: false },
+                { code: 'KR', name: '韩国', emoji: '🇰🇷', common: false },
+                { code: 'TW', name: '台湾', emoji: '🇹🇼', common: false },
+                { code: 'HK', name: '香港', emoji: '🇭🇰', common: false },
+                { code: 'IN', name: '印度', emoji: '🇮🇳', common: false },
+                { code: 'BR', name: '巴西', emoji: '🇧🇷', common: false },
+                { code: 'AR', name: '阿根廷', emoji: '🇦🇷', common: false },
+                { code: 'TR', name: '土耳其', emoji: '🇹🇷', common: false },
+                { code: 'RU', name: '俄罗斯', emoji: '🇷🇺', common: false },
+                { code: 'PL', name: '波兰', emoji: '🇵🇱', common: false },
+                { code: 'SE', name: '瑞典', emoji: '🇸🇪', common: false },
+                { code: 'CH', name: '瑞士', emoji: '🇨🇭', common: false },
+                { code: 'IT', name: '意大利', emoji: '🇮🇹', common: false },
+                { code: 'ES', name: '西班牙', emoji: '🇪🇸', common: false },
+                { code: 'TH', name: '泰国', emoji: '🇹🇭', common: false },
+                { code: 'VN', name: '越南', emoji: '🇻🇳', common: false },
+                { code: 'PH', name: '菲律宾', emoji: '🇵🇭', common: false },
+                { code: 'MY', name: '马来西亚', emoji: '🇲🇾', common: false },
+                { code: 'ID', name: '印尼', emoji: '🇮🇩', common: false },
+                { code: 'MX', name: '墨西哥', emoji: '🇲🇽', common: false },
+                { code: 'ZA', name: '南非', emoji: '🇿🇦', common: false },
+                { code: 'AE', name: '阿联酋', emoji: '🇦🇪', common: false },
+                { code: 'IL', name: '以色列', emoji: '🇮🇱', common: false },
+                { code: 'NZ', name: '新西兰', emoji: '🇳🇿', common: false }
+            ],
+            showMoreCountries: false,  // 是否展开更多国家
+            infoNodeKeywords: '',  // 信息节点过滤关键词（逗号分隔）
+            showInfoNodeFilter: false,  // 是否显示信息节点过滤区域
             enableClashUI: false,
             externalController: '',
             externalUiDownloadUrl: '',
@@ -62,6 +104,20 @@ export const formLogicFn = (t) => {
                 this.input = localStorage.getItem('inputTextarea') || '';
                 this.showAdvanced = localStorage.getItem('advancedToggle') === 'true';
                 this.groupByCountry = localStorage.getItem('groupByCountry') === 'true';
+                // 【新增】加载自定义国家分组状态
+                this.customCountryGrouping = localStorage.getItem('customCountryGrouping') === 'true';
+                const savedCountries = localStorage.getItem('selectedCountries');
+                if (savedCountries) {
+                    try {
+                        this.selectedCountries = JSON.parse(savedCountries);
+                    } catch (e) {
+                        this.selectedCountries = [];
+                    }
+                }
+                this.showMoreCountries = localStorage.getItem('showMoreCountries') === 'true';
+                this.infoNodeKeywords = localStorage.getItem('infoNodeKeywords') || '';
+                this.showInfoNodeFilter = localStorage.getItem('showInfoNodeFilter') === 'true';
+
                 this.enableClashUI = localStorage.getItem('enableClashUI') === 'true';
                 this.externalController = localStorage.getItem('externalController') || '';
                 this.externalUiDownloadUrl = localStorage.getItem('externalUiDownloadUrl') || '';
@@ -92,6 +148,13 @@ export const formLogicFn = (t) => {
                 });
                 this.$watch('showAdvanced', val => localStorage.setItem('advancedToggle', val));
                 this.$watch('groupByCountry', val => localStorage.setItem('groupByCountry', val));
+                // 【新增】watch自定义国家分组状态
+                this.$watch('customCountryGrouping', val => localStorage.setItem('customCountryGrouping', val));
+                this.$watch('selectedCountries', val => localStorage.setItem('selectedCountries', JSON.stringify(val)));
+                this.$watch('showMoreCountries', val => localStorage.setItem('showMoreCountries', val));
+                this.$watch('infoNodeKeywords', val => localStorage.setItem('infoNodeKeywords', val));
+                this.$watch('showInfoNodeFilter', val => localStorage.setItem('showInfoNodeFilter', val));
+
                 this.$watch('enableClashUI', val => localStorage.setItem('enableClashUI', val));
                 this.$watch('externalController', val => localStorage.setItem('externalController', val));
                 this.$watch('externalUiDownloadUrl', val => localStorage.setItem('externalUiDownloadUrl', val));
@@ -262,6 +325,20 @@ export const formLogicFn = (t) => {
                     params.append('customRules', JSON.stringify(customRules));
 
                     if (this.groupByCountry) params.append('group_by_country', 'true');
+
+                    // 【新增】自定义国家分组参数
+                    if (this.customCountryGrouping && this.selectedCountries.length > 0) {
+                        params.append('selected_countries', this.selectedCountries.join(','));
+                    }
+
+                    // 【新增】信息节点过滤参数
+                    if (this.infoNodeKeywords.trim()) {
+                        const keywords = this.infoNodeKeywords.split(',').map(k => k.trim()).filter(Boolean);
+                        if (keywords.length > 0) {
+                            params.append('info_keywords', JSON.stringify(keywords));
+                        }
+                    }
+
                     if (this.enableClashUI) params.append('enable_clash_ui', 'true');
                     if (this.externalController) params.append('external_controller', this.externalController);
                     if (this.externalUiDownloadUrl) params.append('external_ui_download_url', this.externalUiDownloadUrl);

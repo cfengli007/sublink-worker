@@ -186,6 +186,8 @@ export function groupProxiesByCountry(proxies, { getName } = {}) {
 	};
 
 	const grouped = {};
+	const unmatchedNodes = [];  // 收集未匹配的节点
+
 	if (!Array.isArray(proxies) || proxies.length === 0) {
 		return grouped;
 	}
@@ -198,6 +200,7 @@ export function groupProxiesByCountry(proxies, { getName } = {}) {
 		}
 		const countryInfo = parseCountryFromNodeName(proxyName);
 		if (!countryInfo) {
+			unmatchedNodes.push(proxyName);  // 收集而非丢弃
 			return;
 		}
 		const { name } = countryInfo;
@@ -205,6 +208,13 @@ export function groupProxiesByCountry(proxies, { getName } = {}) {
 			grouped[name] = { ...countryInfo, proxies: [] };
 		}
 		grouped[name].proxies.push(proxyName);
+	});
+
+	// 使用不可枚举属性附加未匹配节点，避免影响 Object.keys()
+	Object.defineProperty(grouped, '__unmatchedNodes', {
+		value: unmatchedNodes,
+		enumerable: false,  // 关键：不可枚举
+		configurable: true
 	});
 
 	return grouped;
@@ -361,7 +371,8 @@ export function parseCountryFromNodeName(nodeName) {
 	};
 
 	const allAliases = Object.values(countryData).flatMap(c => c.aliases);
-	const regex = new RegExp(allAliases.map(p => p.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&')).join('|'), 'i');
+	// 修复：使用正确的转义方式
+	const regex = new RegExp(allAliases.map(p => p.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|'), 'i');
 	const match = nodeName.match(regex);
 
 	if (match) {

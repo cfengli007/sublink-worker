@@ -173,6 +173,91 @@ export const Form = (props) => {
                 </div>
               </label>
 
+              {/* 【新增】自定义国家分组 */}
+              <div
+                x-show="groupByCountry"
+                {...{
+                  'x-transition:enter': 'transition ease-out duration-200',
+                  'x-transition:enter-start': 'opacity-0 transform -translate-y-2',
+                  'x-transition:enter-end': 'opacity-100 transform translate-y-0',
+                  'x-transition:leave': 'transition ease-in duration-150',
+                  'x-transition:leave-start': 'opacity-100 transform translate-y-0',
+                  'x-transition:leave-end': 'opacity-0 transform -translate-y-2'
+                }}
+                class="ml-4 pl-4 border-l-2 border-gray-200 dark:border-gray-600 space-y-3"
+              >
+                {/* 启用自定义分组开关 */}
+                <label class="flex items-center justify-between p-2 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700/30 transition-colors cursor-pointer">
+                  <span class="text-sm font-medium text-gray-600 dark:text-gray-400">{t('customCountryGrouping')}</span>
+                  <div class="relative inline-flex items-center cursor-pointer">
+                    <input type="checkbox" x-model="customCountryGrouping" class="sr-only peer" />
+                    <div class="w-9 h-5 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-primary-300 dark:peer-focus:ring-primary-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[1px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all dark:border-gray-600 peer-checked:bg-primary-600"></div>
+                  </div>
+                </label>
+
+                {/* 国家选择区域 */}
+                <div
+                  x-show="customCountryGrouping"
+                  {...{
+                    'x-transition:enter': 'transition ease-out duration-200',
+                    'x-transition:enter-start': 'opacity-0 transform -translate-y-2',
+                    'x-transition:enter-end': 'opacity-100 transform translate-y-0'
+                  }}
+                  class="space-y-2"
+                >
+                  <div class="flex items-center justify-between">
+                    <span class="text-xs font-medium text-gray-500 dark:text-gray-400">{t('selectCountries')}</span>
+                    <div class="flex gap-1">
+                      <button type="button" x-on:click="selectedCountries = allCountries.map(c => c.code)" class="text-xs text-primary-600 dark:text-primary-400 hover:underline">{t('selectAll')}</button>
+                      <span class="text-xs text-gray-400">|</span>
+                      <button type="button" x-on:click="selectedCountries = []" class="text-xs text-red-600 dark:text-red-400 hover:underline">{t('deselectAll')}</button>
+                    </div>
+                  </div>
+                  
+                  {/* 常用国家 (4个) */}
+                  <div class="grid grid-cols-2 gap-1.5">
+                    <template x-for="country in allCountries.filter(c => c.common)" {...{':key': 'country.code'}}>
+                      <label class="flex items-center gap-1.5 p-1.5 rounded-md bg-gray-50 dark:bg-gray-700/50 hover:bg-primary-50 dark:hover:bg-primary-900/20 cursor-pointer transition-colors border border-transparent" {...{':class': "{'border-primary-500 dark:border-primary-400 bg-primary-50 dark:bg-primary-900/30': selectedCountries.includes(country.code)}"}}>
+                        <input type="checkbox" {...{':value': 'country.code', 'x-model': 'selectedCountries'}} class="w-3.5 h-3.5 text-primary-600 bg-white dark:bg-gray-600 border-gray-300 dark:border-gray-500 rounded focus:ring-primary-500 dark:focus:ring-primary-600" />
+                        <span class="text-sm" x-text="country.emoji"></span>
+                        <span class="text-xs font-medium text-gray-700 dark:text-gray-300" x-text="country.name"></span>
+                      </label>
+                    </template>
+                  </div>
+
+                  {/* 更多国家 (折叠) */}
+                  <div>
+                    <button type="button" x-on:click="showMoreCountries = !showMoreCountries" class="w-full flex items-center justify-between p-1.5 text-xs font-medium text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">
+                      <span>{t('moreCountries')}</span>
+                      <i class="fas fa-chevron-down text-[10px] transition-transform" {...{':class': "{'rotate-180': showMoreCountries}"}}>
+</i>
+                    </button>
+                    <div x-show="showMoreCountries" x-collapse class="grid grid-cols-2 gap-1.5 mt-1.5">
+                      <template x-for="country in allCountries.filter(c => !c.common)" {...{':key': 'country.code'}}>
+                        <label class="flex items-center gap-1.5 p-1.5 rounded-md bg-gray-50 dark:bg-gray-700/50 hover:bg-primary-50 dark:hover:bg-primary-900/20 cursor-pointer transition-colors border border-transparent" {...{':class': "{'border-primary-500 dark:border-primary-400 bg-primary-50 dark:bg-primary-900/30': selectedCountries.includes(country.code)}"}}>
+                          <input type="checkbox" {...{':value': 'country.code', 'x-model': 'selectedCountries'}} class="w-3.5 h-3.5 text-primary-600 bg-white dark:bg-gray-600 border-gray-300 dark:border-gray-500 rounded focus:ring-primary-500 dark:focus:ring-primary-600" />
+                          <span class="text-sm" x-text="country.emoji"></span>
+                          <span class="text-xs font-medium text-gray-700 dark:text-gray-300" x-text="country.name"></span>
+                        </label>
+                      </template>
+                    </div>
+                  </div>
+
+                  {/* 信息节点过滤 (折叠) */}
+                  <div class="pt-2 border-t border-gray-200 dark:border-gray-600">
+                    <button type="button" x-on:click="showInfoNodeFilter = !showInfoNodeFilter" class="w-full flex items-center justify-between p-1.5 text-xs font-medium text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">
+                      <span>{t('filterInfoNodes')}</span>
+                      <i class="fas fa-chevron-down text-[10px] transition-transform" {...{':class': "{'rotate-180': showInfoNodeFilter}"}}>
+</i>
+                    </button>
+                    <div x-show="showInfoNodeFilter" x-collapse class="mt-1.5">
+                      <input type="text" x-model="infoNodeKeywords" placeholder={t('infoKeywordsPlaceholder')} class="w-full px-2 py-1.5 text-xs rounded-md border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-1 focus:ring-primary-500 focus:border-transparent" />
+                      <p class="text-[10px] text-gray-500 dark:text-gray-400 mt-1">{t('infoKeywordsHint')}</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
               <label class="flex items-center justify-between p-3 rounded-lg bg-gray-50 dark:bg-gray-700/30 hover:bg-gray-100 dark:hover:bg-gray-700/50 transition-colors cursor-pointer">
                 <span class="font-medium text-gray-700 dark:text-gray-300">{t('enableClashUI')}</span>
                 <div class="relative inline-flex items-center cursor-pointer">

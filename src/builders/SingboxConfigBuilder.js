@@ -237,14 +237,47 @@ export class SingboxConfigBuilder extends BaseConfigBuilder {
     }
 
     addCountryGroups() {
-        const proxies = this.getProxies();
+        // === 插入点 1：前置过滤 ===
+        let proxies = this.getProxies();
+        const allProxies = [...proxies];  // 保存所有原始节点（包括信息节点）
+
+        // 【新增】信息节点过滤
+        if (this.infoNodeKeywords && this.infoNodeKeywords.length > 0) {
+            proxies = proxies.filter(p => {
+                const name = this.getProxyName(p);
+                return !this.infoNodeKeywords.some(
+                    kw => name.toLowerCase().includes(kw.toLowerCase())
+                );
+            });
+        }
+
+        // 【新增】国家预过滤（只有启用自定义分组时）
+        let rejectedProxies = [];
+        if (this.selectedCountries && this.selectedCountries.length > 0) {
+            const accepted = [];
+            proxies.forEach(p => {
+                const name = this.getProxyName(p);
+                const countryInfo = parseCountryFromNodeName(name);
+
+                // 能识别国家 且 不在选择列表 → 拒绝
+                if (countryInfo && !this.selectedCountries.includes(countryInfo.code)) {
+                    rejectedProxies.push(name);
+                } else {
+                    accepted.push(p);  // 选中的 + 无法识别的
+                }
+            });
+            proxies = accepted;
+        }
+
+        // === 原有逻辑：核心分组 ===
         const countryGroups = groupProxiesByCountry(proxies, {
             getName: proxy => this.getProxyName(proxy)
         });
 
         const existingTags = new Set((this.config.outbounds || []).map(o => normalizeGroupName(o?.tag)).filter(Boolean));
 
-        const manualProxyNames = proxies.map(p => p?.tag).filter(Boolean);
+        // 手动切换组：使用所有原始节点（包括信息节点）
+        const manualProxyNames = allProxies.map(p => p?.tag).filter(Boolean);
         const manualGroupName = manualProxyNames.length > 0 ? this.t('outboundNames.Manual Switch') : null;
         if (manualGroupName) {
             const manualNorm = normalizeGroupName(manualGroupName);
@@ -279,6 +312,27 @@ export class SingboxConfigBuilder extends BaseConfigBuilder {
             countryGroupNames.push(groupName);
         });
 
+        // === 插入点 2：添加"其他国家"分组 ===
+        const unmatchedNodes = countryGroups.__unmatchedNodes || [];
+        const otherCountryNodes = [...rejectedProxies, ...unmatchedNodes];
+
+        if (otherCountryNodes.length > 0) {
+            const otherGroupName = this.t('outboundNames.Other Countries') || '🌐 其他国家';
+            const norm = normalizeGroupName(otherGroupName);
+
+            if (!existingTags.has(norm)) {
+                this.config.outbounds.push({
+                    tag: otherGroupName,
+                    type: 'selector',  // 【修改】改为 selector 类型，允许手动选择
+                    outbounds: otherCountryNodes
+                });
+                existingTags.add(norm);
+            }
+
+            countryGroupNames.push(otherGroupName);  // 加入国家组列表
+        }
+
+        // === 原有逻辑：更新节点选择组 ===
         const nodeSelectTag = this.t('outboundNames.Node Select');
         const nodeSelectGroup = this.config.outbounds.find(o => normalizeGroupName(o?.tag) === normalizeGroupName(nodeSelectTag));
         if (nodeSelectGroup && Array.isArray(nodeSelectGroup.outbounds)) {
