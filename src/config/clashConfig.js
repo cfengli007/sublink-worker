@@ -1,7 +1,4 @@
-const clashConfig = {
-  dns: {
-    ipv6: false, // Changed from true to false
-  },
+export const CLASH_CONFIG = {
+    ipv6: false,
+    // other configuration options...
 };
-
-export default clashConfig;
