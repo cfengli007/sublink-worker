@@ -3,9 +3,7 @@
   "buildCommand": "npm run build",
   "functions": {
     "api/index.js": {
-      "includeFiles": [
-        "dist/vercel/**"
-      ]
+      "includeFiles": "dist/vercel/**"
     }
   },
   "rewrites": [
