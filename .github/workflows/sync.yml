@@ -1,0 +1,35 @@
+name: Upstream Sync
+
+permissions:
+  contents: write
+
+on:
+  schedule:
+    - cron: '0 0 * * *' # 每天 UTC 0:00 自动运行一次
+  workflow_dispatch:      # 支持在 Actions 页面手动点击触发
+
+jobs:
+  sync_latest_from_upstream:
+    name: Sync latest commits from upstream repo
+    runs-on: ubuntu-latest
+    if: ${{ github.repository != '7Sageer/sublink-worker' }}
+
+    steps:
+      - name: Checkout target repo
+        uses: actions/checkout@v4
+
+      - name: Sync upstream changes
+        id: sync
+        uses: aabmass/upstream-sync@v2
+        with:
+          upstream_sync_repo: 7Sageer/sublink-worker
+          upstream_sync_branch: main # 原项目的主分支名（main 或 master）
+          target_sync_branch: main   # 你仓库的主分支名
+          target_repo_token: ${{ secrets.GITHUB_TOKEN }}
+          test_mode: false
+
+      - name: Sync check
+        if: failure()
+        run: |
+          echo "同步失败，通常是因为代码存在冲突，请手动拉取本地分支解决冲突后推送。"
+          exit 1
