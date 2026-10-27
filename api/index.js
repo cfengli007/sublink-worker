@@ -1,13 +1,9 @@
 import { Readable } from 'stream';
 import { createVercelRuntime } from '../src/runtime/vercel.js';
+import { createApp } from '../dist/vercel/createApp.js';
 
 const runtime = createVercelRuntime(process.env);
-const appPromise = import('../dist/vercel/createApp.js').then((mod) => {
-    if (!mod?.createApp) {
-        throw new Error('Compiled Vercel bundle is missing createApp export');
-    }
-    return mod.createApp(runtime);
-});
+const app = createApp(runtime);
 
 export const config = {
     runtime: 'nodejs'
@@ -15,7 +11,6 @@ export const config = {
 
 export default async function handler(req, res) {
     try {
-        const app = await appPromise;
         const request = await toRequest(req);
         const response = await app.fetch(request);
         await sendResponse(res, response);
