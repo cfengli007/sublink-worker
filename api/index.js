@@ -1,6 +1,6 @@
 import { Readable } from 'stream';
 import { createVercelRuntime } from '../src/runtime/vercel.js';
-import { createApp } from '../src/app/createApp.jsx';
+import { createApp } from '../dist/vercel/createApp.js';
 
 const runtime = createVercelRuntime(process.env);
 const app = createApp(runtime);

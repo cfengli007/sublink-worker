@@ -21,7 +21,12 @@ async function buildForVercel() {
         bundle: true,
         entryPoints: [entryPoint],
         format: 'esm',
+        jsx: 'automatic',
+        jsxImportSource: 'hono/jsx',
         logLevel: 'info',
+        loader: {
+            '.jsx': 'jsx'
+        },
         minify: isProduction,
         outfile: path.join(outDir, 'createApp.js'),
         platform: 'node',

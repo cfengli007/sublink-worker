@@ -1,0 +1,3 @@
+# Keep Vercel on the Serverless Functions path instead of detecting the local container build.
+Dockerfile
+Dockerfile.*
