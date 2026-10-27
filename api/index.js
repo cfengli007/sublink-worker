@@ -1,35 +1,13 @@
-import { createRequire } from 'module';
 import { Readable } from 'stream';
 import { createVercelRuntime } from '../src/runtime/vercel.js';
-import 'hono/jsx/jsx-runtime';
 
 const runtime = createVercelRuntime(process.env);
-const appPromise = loadCreateApp().then((createApp) => createApp(runtime));
-
-async function loadCreateApp() {
-    try {
-        const mod = await import('../dist/vercel/createApp.js');
-        if (!mod?.createApp) {
-            throw new Error('Compiled Vercel bundle is missing createApp export');
-        }
-        return mod.createApp;
-    } catch (error) {
-        if (error?.code !== 'ERR_MODULE_NOT_FOUND') {
-            throw error;
-        }
+const appPromise = import('../dist/vercel/createApp.js').then((mod) => {
+    if (!mod?.createApp) {
+        throw new Error('Compiled Vercel bundle is missing createApp export');
     }
-
-    const { register } = await import('esbuild-register/dist/node');
-    register({
-        extensions: ['.ts', '.tsx', '.jsx'],
-        jsx: 'automatic',
-        target: 'es2020'
-    });
-
-    const require = createRequire(import.meta.url);
-    const { createApp } = require('../src/app/createApp.jsx');
-    return createApp;
-}
+    return mod.createApp(runtime);
+});
 
 export const config = {
     runtime: 'nodejs'
