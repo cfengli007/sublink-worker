@@ -251,6 +251,10 @@ export const Layout = (props) => {
             return translations[langKey][key] || translations['en-US'][key];
           }
         </script>
+        <script>
+          window.si = window.si || function () { (window.siq = window.siq || []).push(arguments); };
+        </script>
+        <script defer src="/_vercel/speed-insights/script.js"></script>
       </head>
       <body class="bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 transition-colors duration-300">
         ${children}
